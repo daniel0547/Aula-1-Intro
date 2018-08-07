@@ -23,6 +23,7 @@ int main()
     initialize(y, x, a);
 
     vector<int> y_omp(y);
+    vector<int> y_dyn(y);
 
     steady_clock::time_point begin_serial = steady_clock::now();
     saxpy_serial(y, x, a, SIZE);
@@ -32,15 +33,25 @@ int main()
          << duration_cast<microseconds>(end_serial - begin_serial).count()
          << "us" << endl;
 
-    steady_clock::time_point begin_parallel = steady_clock::now();
-    saxpy_parallel(y_omp, x, a, SIZE);
-    steady_clock::time_point end_parallel = steady_clock::now();
+    steady_clock::time_point begin_parallel_static = steady_clock::now();
+    saxpy_parallel_static(y_omp, x, a, SIZE);
+    steady_clock::time_point end_parallel_static = steady_clock::now();
 
-    cout << "Parallel elapsed time: "
-         << duration_cast<microseconds>(end_parallel - begin_parallel).count()
+    cout << "Parallel static elapsed time: "
+         << duration_cast<microseconds>(end_parallel_static - begin_parallel_static).count()
          << "us" << endl;
 
     validate(y, y_omp, SIZE);
+
+    steady_clock::time_point begin_parallel = steady_clock::now();
+    saxpy_parallel_dynamic(y_dyn, x, a, SIZE);
+    steady_clock::time_point end_parallel = steady_clock::now();
+
+    cout << "Parallel dynamic elapsed time: "
+         << duration_cast<microseconds>(end_parallel - begin_parallel).count()
+         << "us" << endl;
+
+    validate(y, y_dyn, SIZE);
 
     exit(EXIT_SUCCESS);
 }

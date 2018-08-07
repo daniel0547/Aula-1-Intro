@@ -10,6 +10,6 @@ void saxpy_serial(vector<int> &y,
 {    
     for(size_t i = 0; i < n; i++)
     {
-        y[i] = a * x[i] + y[i];
+        y[i]+= a * x[i];
     }
 }
